@@ -1,0 +1,9 @@
+services: 
+  web:
+    image: oneapi-web
+    command: sh -c "npm install & npm run build && npm run start"
+    ports:
+      - 3000:3000
+    working_dir: /app
+  api: 
+    image: oneapi-api 

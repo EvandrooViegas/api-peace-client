@@ -7,8 +7,8 @@ up:
 	docker compose up -d
 down:
 	docker compose down 
-client:
-	cd ./client && npm run dev
+web:
+	cd src/web && npm run dev
 
-server:
+api:
 	 cd src/api/cmd/api/v1 && nodemon --exec go run main.go

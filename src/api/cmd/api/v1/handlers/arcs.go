@@ -9,7 +9,8 @@ import (
 
 
 func GetAllArcsHandler(w http.ResponseWriter, r *http.Request) error {
-	arcs, err := services.GetAllArcs()
+	addr := api.GetServerAddr(r)
+	arcs, err := services.GetAllArcs(addr)
 	if err != nil {
 		return api.HandleJSONResponse(w, api.ApiResponse{
 			Status: http.StatusInternalServerError,

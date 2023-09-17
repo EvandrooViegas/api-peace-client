@@ -3,17 +3,17 @@ package services
 import (
 	"encoding/json"
 	"os"
-	"path/filepath"
+	"github.com/EvandrooViegas/api-piece/cmd/api/v1/utils"
 )
 
-func GetAllArcs() ([]Arc, error) {
-	path := "public/data/arcs.json"
-	workingDir, err := os.Getwd()
+
+func GetAllArcs(addr string) ([]Arc, error) {
+	path, err := utils.GetAbsolutePath( "public/data/arcs.json")
 	if err != nil {
 		return make([]Arc, 0), err
 	}
-	absolutePath := filepath.Join(workingDir, path)
-	file, err := os.Open(absolutePath)
+
+	file, err := os.Open(path)
 	defer file.Close()
 	if err != nil {
 		return make([]Arc, 0), err
@@ -24,6 +24,10 @@ func GetAllArcs() ([]Arc, error) {
 	err = decoder.Decode(&arcs)
 	if err != nil {
 		return make([]Arc, 0), err
+	}
+
+	for idx := range arcs {
+		arcs[idx].Image = addr + "/image" + arcs[idx].Image 
 	}
 	return arcs, nil
 }

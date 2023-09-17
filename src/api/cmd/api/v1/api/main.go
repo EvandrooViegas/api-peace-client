@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type ApiResponse struct {
@@ -32,6 +33,15 @@ func HandleJSONResponse(w http.ResponseWriter, r ApiResponse) error {
 	return nil
 }
 
+func HandleImageResponse(w http.ResponseWriter, buf []byte, imgName string) error {
+	ext := strings.Split(imgName, ".")[1]
+	contentType := "image/" + ext
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", contentType)
+	w.Write(buf)
+	return nil
+}
+
 func HandleFunc(
 	handler func(w http.ResponseWriter, r *http.Request) error,
 ) func(w http.ResponseWriter, r *http.Request) {
@@ -41,4 +51,16 @@ func HandleFunc(
 			fmt.Println("Handler Error: ", err)
 		}
 	}
+}
+
+func GetServerAddr(r *http.Request) string {
+	host := r.Host
+
+		scheme := "http"
+		if r.TLS != nil {
+			scheme = "https"
+		}
+
+		serverAddress := scheme + "://" + host
+		return serverAddress
 }

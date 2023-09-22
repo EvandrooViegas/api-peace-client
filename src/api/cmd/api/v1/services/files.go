@@ -2,7 +2,7 @@ package services
 
 import (
 	"os"
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/utils"
+	"github.com/EvandrooViegas/utils"
 )
 
 func GetImageBuf(file string) ([]byte, error) {

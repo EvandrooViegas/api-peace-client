@@ -1,6 +1,6 @@
-module github.com/EvandrooViegas/api-piece
+module github.com/EvandrooViegas
 
-go 1.20
+go 1.21.1
 
 require (
 	github.com/fatih/color v1.15.0

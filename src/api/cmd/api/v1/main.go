@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/api"
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/handlers"
+	"github.com/EvandrooViegas/api"
+	"github.com/EvandrooViegas/handlers"
 	"github.com/fatih/color"
 	"github.com/gorilla/mux"
 )

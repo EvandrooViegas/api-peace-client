@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/api"
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/services"
+	"github.com/EvandrooViegas/api"
+	"github.com/EvandrooViegas/services"
 	"github.com/gorilla/mux"
 )
 

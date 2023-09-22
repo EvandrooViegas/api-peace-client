@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/EvandrooViegas/api-piece/cmd/api/v1/api"
+	"github.com/EvandrooViegas/api"
 )
 
 func ServerHealthHandler(w http.ResponseWriter, r *http.Request) error  {

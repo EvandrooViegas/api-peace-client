@@ -1,9 +1,19 @@
 services: 
   web:
+    networks:
+      - appnet
     image: oneapi-web
     command: sh -c "npm install & npm run build && npm run start"
     ports:
       - 3000:3000
     working_dir: /app
   api: 
+    networks:
+      - appnet
     image: oneapi-api 
+    ports:
+      - 8080:8080
+    working_dir: /app
+
+networks:
+  appnet:

@@ -4,6 +4,7 @@ go 1.21.1
 
 require (
 	github.com/fatih/color v1.15.0
+	github.com/gofor-little/env v1.0.14
 	github.com/gorilla/mux v1.8.0
 )
 

@@ -14,6 +14,22 @@ type ApiResponse struct {
 	Error   interface{}
 }
 
+
+func MakeRequest(rq *http.Request, resMap *map[string]interface{}) error {
+	client := &http.Client{}
+	res, err := client.Do(rq)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&resMap); err != nil {
+		return err
+	}
+	return nil
+}
+
 func HandleJSONResponse(w http.ResponseWriter, r ApiResponse) error {
 	data, err := json.Marshal(map[string]interface{}{
 		"status": r.Status,

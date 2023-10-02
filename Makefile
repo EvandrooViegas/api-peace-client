@@ -11,12 +11,12 @@ d-restart:
 
 # web
 web:
-	cd src/web && npm run dev
+	cd src/web && set && npm run dev 
 web-d-build: 
 	cd src/web && docker build -t oneapi-web .
 
 # api
 api:
-	cd src/api/cmd/api/v1 && nodemon --exec go run main.go
+	cd src/api/cmd/api/v1 && npm i -g nodemon && go mod tidy && set APP_ENV=dev&& nodemon --exec go run main.go 
 api-d-build: 
 	cd src/api/cmd/api/v1 && docker build -t oneapi-api .

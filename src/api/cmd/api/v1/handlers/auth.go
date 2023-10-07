@@ -34,7 +34,7 @@ func AuthWithGithubHandler(w http.ResponseWriter, r *http.Request) error {
 	
 	usrRespMap, err := getGHuser(acsTkn)
 	if err != nil {
-		return fmt.Errorf("Error parsing")
+		return err
 	}
 	fmt.Println(usrRespMap["id"])
 	return nil

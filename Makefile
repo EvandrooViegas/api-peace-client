@@ -6,21 +6,51 @@ down:
 #app 
 
 app-build: web-build api-build
-app-run: web-start
+app: net mongo web api
+
+#network 
+net: 
+	@echo --CREATING APP NETWORK ONEAPI-NETWORK
+	-docker network create oneapi-network
 
 # web
-web-start: 
-	@echo "Starting oneapi-web"
-	cd src/web && docker run --name oneapi-web -v .:/app -w /app -d -p  3000:3000 -p 3001:3001 oneapi-web sh -c "npm run dev"
+web-local:
+	@echo --RUNNING WEB LOCALLY
+	cd src/web && npm run dev
+web: net web-stop
+	@echo --STARTING WEB
+	cd src/web && docker run --network oneapi-network --network-alias web --name oneapi-web -v .:/app -w /app -dp  3000:3000 oneapi-web sh -c "npm i && npm run dev"
 web-stop:
-	@echo "Stopping and removing oneapi-web..."; 
-	docker rm -f oneapi-web 
+	@echo --STOPPING WEB 
+	-docker rm -f oneapi-web 
 web-build: 
+	@echo --BUILDING API
 	cd src/web && docker build -t oneapi-web .
+
+
+# mongo
+mongo-stop:
+	@echo --STOPPPING MONGODB
+	-docker stop mongodb 
+	-docker remove mongodb
+mongo: net mongo-stop
+	@echo --STARTING MONGODB
+	-docker stop mongodb 
+	-docker remove mongodb
+	-docker volume create oneapi-mongodb
+	docker run --network oneapi-network --network-alias mongodb --name mongodb -w /app --mount type=volume,src=oneapi-mongodb,target=/data/db   -dp 27017:27017 mongo:latest 
+
 # api
-api-local:
-	cd src/api/cmd/api/v1 && npm i -g nodemon && go mod tidy && set APP_ENV=dev&& nodemon --exec go run main.go 
-api-run: 
-	cd src/api/cmd/api/v1 && docker run --name oneapi-api --network oneapi-network --network-alias api -dp 8080:8080 -w /app --mount "type=bind,src=.,target=/app" golang:1.21.1 sh -c "go mod tidy && go run main.go" 
+api-local: 
+	@echo --RUNNING API LOCALLY API
+	cd src/api/cmd/api/v1 && set APP_ENV=dev && air
+api: net api-stop
+	@echo --STARTING API
+	cd src/api/cmd/api/v1  &&  docker run --network oneapi-network --network-alias api --name oneapi-api -dp 8080:8080 -w /app -v .:/app -e APP_ENV=dev oneapi-api
+api-stop:
+	@echo --STOPPING API
+	-docker rm -f oneapi-api 
+
 api-build: 
+	@echo --BUILDING API
 	cd src/api/cmd/api/v1 && docker build -t oneapi-api .

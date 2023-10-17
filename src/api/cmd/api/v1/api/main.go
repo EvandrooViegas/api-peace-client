@@ -22,7 +22,6 @@ func MakeRequest(rq *http.Request, resMap *map[string]interface{}) error {
 		return err
 	}
 	defer res.Body.Close()
-
 	decoder := json.NewDecoder(res.Body)
 	if err := decoder.Decode(&resMap); err != nil {
 		return err

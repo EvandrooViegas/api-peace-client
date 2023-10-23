@@ -6,7 +6,8 @@ down:
 #app 
 
 app-build: web-build api-build
-app: net mongo web api
+app: net app-stop mongo mongoex web api
+app-stop: mongo-stop mongoex-stop web-stop api-stop
 
 #network 
 net: 
@@ -28,17 +29,32 @@ web-build:
 	cd src/web && docker build -t oneapi-web .
 
 
-# mongo
+#mongo express
+mongoex: mongoex-stop
+	@echo --STARTING MONGO EXPRESS
+	docker run -it --network oneapi-network \
+	--network-alias mongoex \
+    --name oneapi-mongoex \
+    -dp 8081:8081 \
+    -e ME_CONFIG_MONGODB_AUTH_DATABASE="oneapi" \
+    -e ME_CONFIG_BASICAUTH_USERNAME="root" \
+    -e ME_CONFIG_BASICAUTH_PASSWORD="rootpass" \
+    mongo-express
+
+mongoex-stop:
+	@echo --STOPPING MONGO EXPRESS
+	-docker stop oneapi-mongoex
+	-docker remove oneapi-mongoex
+
+# mongodb
 mongo-stop:
 	@echo --STOPPPING MONGODB
-	-docker stop mongodb 
-	-docker remove mongodb
+	-docker stop oneapi-mongodb 
+	-docker remove oneapi-mongodb
 mongo: net mongo-stop
 	@echo --STARTING MONGODB
-	-docker stop mongodb 
-	-docker remove mongodb
 	-docker volume create oneapi-mongodb
-	docker run --network oneapi-network --network-alias mongodb --name mongodb -w /app --mount type=volume,src=oneapi-mongodb,target=/data/db   -dp 27017:27017 mongo:latest 
+	docker run --network oneapi-network --network-alias mongodb --name oneapi-mongodb -w /app --mount type=volume,src=oneapi-mongodb,target=/data/db -dp 27017:27017 mongo:latest 
 
 # api
 api-local: 

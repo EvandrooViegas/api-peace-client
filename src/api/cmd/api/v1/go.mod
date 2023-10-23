@@ -5,6 +5,8 @@ go 1.21.1
 require (
 	github.com/fatih/color v1.15.0
 	github.com/gofor-little/env v1.0.14
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/gorilla/mux v1.8.0
 	go.mongodb.org/mongo-driver v1.12.1
 )

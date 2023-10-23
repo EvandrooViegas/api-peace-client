@@ -23,6 +23,7 @@ func InitRouter() {
 	r.HandleFunc("/health", api.HandleFunc(handlers.ServerHealthHandler))
 	r.HandleFunc("/arcs", api.HandleFunc(handlers.GetAllArcsHandler))
 	r.HandleFunc("/auth/github/{code}", api.HandleFunc(handlers.AuthWithGithubHandler))
+	r.HandleFunc("/user", api.HandleFunc(handlers.GetUserHandler))
 	color := color.New(color.FgHiCyan).Add(color.Underline)
 	color.Println("🏮 Server Started and Listening on port", serverPort)
 

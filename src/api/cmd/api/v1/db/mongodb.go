@@ -9,14 +9,15 @@ import (
 )
 
 const uri = "mongodb://mongodb:27017"
-const MONGO_DATABASE = "oneapi" 
-const USER_COLLECTION = "users" 
+const MONGO_DATABASE = "oneapi"
+const USER_COLLECTION = "users"
+
 type MongoDB struct {
 	client *mongo.Client
 }
 
 func (cl MongoDB) GetUserService() userService {
-	return userService{ client: cl.client }
+	return userService{client: cl.client}
 }
 
 func (cl MongoDB) Disconnect(ctx context.Context) error {
@@ -27,21 +28,21 @@ func (cl MongoDB) Disconnect(ctx context.Context) error {
 	return nil
 }
 
-func ConnectMongoDB() (MongoDB, error) {
+func ConnectMongoDB() (MongoDB, func(context.Context) error, error) {
 	ctx := context.TODO()
 	opts := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		return MongoDB{}, err
+		return MongoDB{}, nil, err
 	}
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		return MongoDB{}, err
+		return MongoDB{}, nil, err
 	}
 	fmt.Println("Connected to the database")
 
 	return MongoDB{
 		client: client,
-	}, nil
+	}, client.Disconnect, nil
 }

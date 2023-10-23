@@ -1,10 +1,9 @@
 package utils
 
 import (
+	"github.com/gofor-little/env"
 	"os"
 	"path/filepath"
-	"github.com/gofor-little/env"
-
 )
 
 func GetAbsolutePath(path string) (string, error) {
